@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zone Manager Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>Welcome</h2>
+            <p>Hello, Mounika</p>
+            <ul>
+                <li><button onclick="showSection('source')">Select Source</button></li>
+                <li><button onclick="showSection('draw')">Draw Zones</button></li>
+                <li><button onclick="showSection('preview')">Preview Zones</button></li>
+                <li><button onclick="showSection('edit')">Edit Zones</button></li>
+                <li><button onclick="showSection('update')">Delete Zones</button></li>
+                <!-- ✅ New Milestone 3 option -->
+                <li><button onclick="window.location.href='/dashboard3'">Dashboard</button></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <h1>Zone Manager</h1>
+
+            <!-- Default Dashboard Section -->
+            <div id="default" class="section">
+                <h2>Welcome to Zone Manager</h2>
+                <p>Select an option from the sidebar to continue.</p>
+            </div>
+
+            <!-- Select Source Section -->
+            <div id="source" class="section" style="display:none;">
+                <h2>Select Video Source</h2>
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <input type="file" name="file" accept="video/*">
+                    <button type="button" onclick="uploadVideo()">Upload Video</button>
+                </form>
+                <button onclick="useWebcam()">Use Webcam</button>
+            </div>
+
+            <!-- Draw Zone Section -->
+            <div id="draw" class="section" style="display:none;">
+                <h2>Draw Zones</h2>
+                <input type="text" id="zoneLabel" placeholder="Enter zone label">
+                <button onclick="startDraw()">Start Drawing</button>
+                <button onclick="saveZone()">Save Zone</button>
+                <div style="position: relative; width: 640px; height: 480px;">
+                    <img id="videoFeed" src="{{ url_for('video_feed') }}" width="640" height="480" style="position: absolute; top: 0; left: 0; display:none;">
+                    <canvas id="canvas" width="640" height="480" style="position: absolute; top: 0; left: 0; display:none;"></canvas>
+                </div>
+            </div>
+
+            <!-- Preview Zone Section -->
+            <div id="preview" class="section" style="display:none;">
+                <h2>Preview Zones</h2>
+                <div style="position: relative; width: 640px; height: 480px;">
+                    <img id="previewFeed" src="{{ url_for('video_feed') }}" width="640" height="480" style="position:absolute; top:0; left:0;">
+                    <canvas id="previewCanvas" width="640" height="480" style="position:absolute; top:0; left:0; pointer-events:none;"></canvas>
+                </div>
+            </div>
+
+            <!-- Edit Zone Section -->
+            <div id="edit" class="section" style="display:none;">
+                <h2>Edit Zones</h2>
+                <select id="editZoneSelect"></select>
+                <button onclick="editZone()">Edit Zone</button>
+                <div id="editArea" style="display:none; margin-top:20px;">
+                    <p>Draw new boundaries for the selected zone:</p>
+                    <div style="position: relative; width: 640px; height: 480px;">
+                        <img id="editFeed" src="{{ url_for('video_feed') }}" width="640" height="480" style="position:absolute; top:0; left:0;">
+                        <canvas id="editCanvas" width="640" height="480" style="position:absolute; top:0; left:0; border:1px solid #ccc;"></canvas>
+                    </div>
+                    <br>
+                    <button onclick="saveEditedZone()">Save Changes</button>
+                </div>
+            </div>
+
+            <!-- Delete Zone Section -->
+            <div id="update" class="section" style="display:none;">
+                <h2>Delete Zones</h2>
+                <select id="zoneSelect"></select>
+                <button onclick="deleteZone()">Delete Zone</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        function showSection(sectionId) {
+            // hide all sections
+            document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
+            // show the chosen section
+            document.getElementById(sectionId).style.display = 'block';
+            // load zones when needed
+            if (sectionId === 'update' || sectionId === 'edit') {
+                loadZones();
+            }
+            if (sectionId === 'preview') {
+                drawPreviewZones();
+            }
+        }
+    </script>
+</body>
+</html>

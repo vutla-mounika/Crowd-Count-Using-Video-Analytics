@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Real-Time Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background:#f4f6f9; margin:0; padding:0; }
+        .dashboard-container { max-width: 1200px; margin:auto; padding:20px; }
+        .dashboard-header { text-align:center; background:#2c3e50; color:white; padding:20px; border-radius:10px; margin-bottom:20px; }
+        .cards { display:grid; grid-template-columns: repeat(3, 1fr); gap:15px; margin-bottom:20px; }
+        .card { background:white; padding:20px; text-align:center; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+        .dashboard-sections { display:grid; grid-template-columns: 1fr 1fr; gap:20px; }
+        .section { background:#fff; padding:20px; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+        h2 { margin-top:0; color:#2c3e50; }
+        table { width:100%; border-collapse:collapse; margin-top:15px; }
+        table td, th { padding:10px; border-bottom:1px solid #ddd; }
+        .back-btn { display:block; margin:30px auto; padding:12px 18px; background:#007bff; color:white; text-decoration:none; border-radius:8px; text-align:center; width:200px; }
+        .back-btn:hover { background:#0056b3; }
+    </style>
+</head>
+<body>
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>📊 Real-Time Dashboard 
+            <span style="background:#e74c3c; padding:5px 10px; border-radius:6px; font-size:14px;">LIVE</span>
+        </h1>
+    </div>
+
+    <!-- 🚨 Alert Box -->
+    <div id="alertBox" 
+         style="display:none; background:#ffcccc; color:#b30000; 
+                padding:12px; border-radius:8px; text-align:center; 
+                font-weight:bold; margin-bottom:20px;">
+    </div>
+
+    <!-- Analytics Cards -->
+    <div class="cards" id="analyticsCards"></div>
+
+    <div class="dashboard-sections">
+        <!-- Zone Occupancy -->
+        <div class="section">
+            <h2>Zone Occupancy</h2>
+            <table id="occupancyTable"></table>
+        </div>
+
+        <!-- Heatmap -->
+        <div class="section">
+            <h2>Activity Heatmap</h2>
+            <canvas id="heatmapChart"></canvas>
+        </div>
+    </div>
+
+    <div class="dashboard-sections" style="margin-top:20px;">
+        <!-- Line Chart -->
+        <div class="section">
+            <h2>People Trend</h2>
+            <canvas id="lineChart"></canvas>
+        </div>
+
+        <!-- Bar Chart -->
+        <div class="section">
+            <h2>Zone Comparison</h2>
+            <canvas id="barChart"></canvas>
+        </div>
+    </div>
+
+    <a href="{{ url_for('welcome') }}" class="back-btn">⬅ Back to Home</a>
+</div>
+
+<script src="{{ url_for('static', filename='script_dashboard.js') }}"></script>
+</body>
+</html>
